@@ -7,12 +7,19 @@ class PetsController < ApplicationController
 
   get '/pets/new' do
     @owners = Owner.all # mine
+    # @pet = Pet.create(name: params["pet_name"], owner_id: params["pet"]["owner_id"])
+    # @owner = Owner.create(name: params["owner"]["name"])
     erb :'/pets/new'
   end
 
   post '/pets' do
-  #  binding.pry
-    @pets = Pet.new(name: params["pet_name"], owner_id: params["pet"]["owner_id"])
+    binding.pry
+    @pet = Pet.create(name: params["pet_name"], owner_id: params["pet"]["owner_id"])
+
+    if !params["owner"]["name"].empty? # ""
+      @owner = Owner.create(params[:owner])
+      @pet.owner_id = Owner.all.last.id
+    end
     redirect to "pets/#{@pet.id}"
   end
 
